@@ -174,14 +174,28 @@ namespace WiimoteTest
 					}
 					lblCOG.Text = ws.BalanceBoardState.CenterOfGravity.ToString();
 					break;
+
+				case ExtensionType.TaikoDrum:
+					clbTaiko.SetItemChecked(0, ws.TaikoDrumState.OuterLeft);
+					clbTaiko.SetItemChecked(1, ws.TaikoDrumState.InnerLeft);
+					clbTaiko.SetItemChecked(2, ws.TaikoDrumState.InnerRight);
+					clbTaiko.SetItemChecked(3, ws.TaikoDrumState.OuterRight);
+					break;
+
+				case ExtensionType.MotionPlus:
+					lblMotionPlus.Text = ws.MotionPlusState.RawValues.ToString();
+					clbSpeed.SetItemChecked(0, ws.MotionPlusState.YawFast);
+					clbSpeed.SetItemChecked(1, ws.MotionPlusState.PitchFast);
+					clbSpeed.SetItemChecked(2, ws.MotionPlusState.RollFast);
+					break;
 			}
 
 			g.Clear(Color.Black);
 
-			UpdateIR(ws.IRState.IRSensors[0], lblIR1, lblIR1Raw, chkFound1, Color.Red);
-			UpdateIR(ws.IRState.IRSensors[1], lblIR2, lblIR2Raw, chkFound2, Color.Blue);
-			UpdateIR(ws.IRState.IRSensors[2], lblIR3, lblIR3Raw, chkFound3, Color.Yellow);
-			UpdateIR(ws.IRState.IRSensors[3], lblIR4, lblIR4Raw, chkFound4, Color.Orange);
+			UpdateIR(ws.IRState.IRSensors[0], lblIR1, lblIR1Raw, 0, Color.Red);
+			UpdateIR(ws.IRState.IRSensors[1], lblIR2, lblIR2Raw, 1, Color.Blue);
+			UpdateIR(ws.IRState.IRSensors[2], lblIR3, lblIR3Raw, 2, Color.Yellow);
+			UpdateIR(ws.IRState.IRSensors[3], lblIR4, lblIR4Raw, 3, Color.Orange);
 
 			if(ws.IRState.IRSensors[0].Found && ws.IRState.IRSensors[1].Found)
 				g.DrawEllipse(new Pen(Color.Green), (int)(ws.IRState.RawMidpoint.X / 4), (int)(ws.IRState.RawMidpoint.Y / 4), 2, 2);
@@ -193,9 +207,9 @@ namespace WiimoteTest
 			lblDevicePath.Text = "Device Path: " + mWiimote.HIDDevicePath;
 		}
 
-		private void UpdateIR(IRSensor irSensor, Label lblNorm, Label lblRaw, CheckBox chkFound, Color color)
+		private void UpdateIR(IRSensor irSensor, Label lblNorm, Label lblRaw, int index, Color color)
 		{
-			chkFound.Checked = irSensor.Found;
+			clbIR.SetItemChecked(index, irSensor.Found);
 
 			if(irSensor.Found)
 			{
@@ -215,6 +229,11 @@ namespace WiimoteTest
 		public Wiimote Wiimote
 		{
 			set { mWiimote = value; }
+		}
+
+		private void button1_Click(object sender, EventArgs e)
+		{
+			mWiimote.InitializeMotionPlus();
 		}
 	}
 }

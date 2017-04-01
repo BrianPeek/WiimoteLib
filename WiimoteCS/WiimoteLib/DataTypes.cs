@@ -206,11 +206,18 @@ namespace WiimoteLib
 		/// </summary>
 		public BalanceBoardState BalanceBoardState;
 		/// <summary>
+		/// Current state of the Taiko TaTaCon drum controller
+		/// </summary>
+		public TaikoDrumState TaikoDrumState;
+		/// <summary>
+		/// Current state of the MotionPlus controller
+		/// </summary>
+		public MotionPlusState MotionPlusState;
+		/// <summary>
 		/// Current state of LEDs
 		/// </summary>
 		[DataMember]
 		public LEDState LEDState;
-
 		/// <summary>
 		/// Constructor for WiimoteState class
 		/// </summary>
@@ -555,6 +562,49 @@ namespace WiimoteLib
 	}
 
 	/// <summary>
+	/// Current state of the Taiko Drum (TaTaCon) controller
+	/// </summary>
+	[Serializable]
+	[DataContract]
+	public struct TaikoDrumState
+	{
+		/// <summary>
+		/// Drum hit location
+		/// </summary>
+		[DataMember]
+		public bool InnerLeft, InnerRight, OuterLeft, OuterRight;
+	}
+
+	/// <summary>
+	/// Current state of the MotionPlus controller
+	/// </summary>
+	[Serializable]
+	[DataContract]
+	public struct MotionPlusState
+	{
+		/// <summary>
+		/// Raw speed data
+		/// <remarks>Values range between 0 - 16384</remarks>
+		/// </summary>
+		[DataMember]
+		public Point3 RawValues;
+
+		/// <summary>
+		/// Normalized speed data
+		/// <remarks>Values range between 0 - ?</remarks>
+		/// </summary>
+		[DataMember]
+		public Point3F Values;
+
+		/// <summary>
+		/// Yaw/Pitch/Roll rotating "quickly" (no definition for "quickly" yet...)
+		/// </summary>
+		[DataMember]
+		public bool YawFast, PitchFast, RollFast;
+	}
+
+
+	/// <summary>
 	/// Calibration information
 	/// </summary>
 	[Serializable]
@@ -716,7 +766,8 @@ namespace WiimoteLib
 		[DataMember]
 		public Point3 RawValues;
 		/// <summary>
-		/// Normalized accelerometer data.  Values range between 0 - ?, but values > 3 and &lt; -3 are inaccurate.
+		/// Normalized accelerometer data.
+		/// <remarks>Values range between 0 - ?, but values > 3 and &lt; -3 are inaccurate.</remarks>
 		/// </summary>
 		[DataMember]
 		public Point3F Values;
@@ -785,6 +836,14 @@ namespace WiimoteLib
 		/// Wii Fit Balance Board controller
 		/// </summary>
 		BalanceBoard		= 0x0000a4200402,
+		/// <summary>
+		/// Taiko "TaTaCon" drum controller
+		/// </summary>
+		TaikoDrum			= 0x0000a4200111,
+		/// <summary>
+		/// Wii MotionPlus extension
+		/// </summary>
+		MotionPlus			= 0x0000a4200405,
 		/// <summary>
 		/// Partially inserted extension.  This is an error condition.
 		/// </summary>
@@ -904,4 +963,19 @@ namespace WiimoteLib
 		/// </summary>
 		GuitarHeroWorldTour
 	}
+
+	/// <summary>
+	/// Last ReadData status
+	/// </summary>
+	public enum LastReadStatus
+	{
+		/// <summary>
+		/// Successful read
+		/// </summary>
+		Success,
+		/// <summary>
+		/// Attempt to read from write only memory
+		/// </summary>
+		ReadFromWriteOnlyMemory
+	};
 }

@@ -44,7 +44,7 @@ namespace WiimoteLib
 		private enum OutputReport : byte
 		{
 			LEDs			= 0x11,
-			Type			= 0x12,
+			DataReportType	= 0x12,
 			IR				= 0x13,
 			Status			= 0x15,
 			WriteMemory		= 0x16,
@@ -61,7 +61,10 @@ namespace WiimoteLib
 		private const int REGISTER_EXTENSION_INIT_1			= 0x04a400f0;
 		private const int REGISTER_EXTENSION_INIT_2			= 0x04a400fb;
 		private const int REGISTER_EXTENSION_TYPE			= 0x04a400fa;
+		private const int REGISTER_EXTENSION_TYPE_2			= 0x04a400fe;
 		private const int REGISTER_EXTENSION_CALIBRATION	= 0x04a40020;
+
+		private const int REGISTER_MOTIONPLUS_INIT			= 0x04a600fe;
 
 		// length between board sensors
 		private const int BSL = 43;
@@ -74,9 +77,6 @@ namespace WiimoteLib
 
 		// a pretty .NET stream to read/write from/to
 		private FileStream mStream;
-
-		// report buffer
-		private readonly byte[] mBuff = new byte[REPORT_LENGTH];
 
 		// read data buffer
 		private byte[] mReadBuff;
@@ -272,6 +272,15 @@ namespace WiimoteLib
 		}
 
 		/// <summary>
+		/// Initialize the MotionPlus extension
+		/// </summary>
+		public void InitializeMotionPlus()
+		{
+			Debug.WriteLine("InitializeMotionPlus");
+			WriteData(REGISTER_MOTIONPLUS_INIT, 0x04);
+		}
+
+		/// <summary>
 		/// Disconnect from the controller and stop reading data from it
 		/// </summary>
 		public void Disconnect()
@@ -368,6 +377,7 @@ namespace WiimoteLib
 					ParseExtension(buff, 16);
 					break;
 				case InputReport.Status:
+					Debug.WriteLine("******** STATUS ********");
 					ParseButtons(buff);
 					mWiimoteState.BatteryRaw = buff[6];
 					mWiimoteState.Battery = (((100.0f * 48.0f * (float)((int)buff[6] / 48.0f))) / 192.0f);
@@ -378,18 +388,22 @@ namespace WiimoteLib
 					mWiimoteState.LEDState.LED3 = (buff[3] & 0x40) != 0;
 					mWiimoteState.LEDState.LED4 = (buff[3] & 0x80) != 0;
 
+					BeginAsyncRead();
+					byte[] extensionType = ReadData(REGISTER_EXTENSION_TYPE_2, 1);
+					Debug.WriteLine("Extension byte=" + extensionType[0].ToString("x2"));
+
 					// extension connected?
 					bool extension = (buff[3] & 0x02) != 0;
-					Debug.WriteLine("Extension: " + extension);
+					Debug.WriteLine("Extension, Old: " + mWiimoteState.Extension + ", New: " + extension);
 
-					if(mWiimoteState.Extension != extension)
+					if(mWiimoteState.Extension != extension || extensionType[0] == 0x04)
 					{
 						mWiimoteState.Extension = extension;
 
 						if(extension)
 						{
 							BeginAsyncRead();
-							InitializeExtension();
+							InitializeExtension(extensionType[0]);
 						}
 						else
 							mWiimoteState.ExtensionType = ExtensionType.None;
@@ -405,7 +419,7 @@ namespace WiimoteLib
 					ParseReadData(buff);
 					break;
 				case InputReport.OutputReportAck:
-					Debug.WriteLine("ack: " + buff[0] + " " +  buff[1] + " " +buff[2] + " " +buff[3] + " " +buff[4]);
+//					Debug.WriteLine("ack: " + buff[0] + " " +  buff[1] + " " +buff[2] + " " +buff[3] + " " +buff[4]);
 					mWriteDone.Set();
 					break;
 				default:
@@ -419,10 +433,16 @@ namespace WiimoteLib
 		/// <summary>
 		/// Handles setting up an extension when plugged in
 		/// </summary>
-		private void InitializeExtension()
+		private void InitializeExtension(byte extensionType)
 		{
-			WriteData(REGISTER_EXTENSION_INIT_1, 0x55);
-			WriteData(REGISTER_EXTENSION_INIT_2, 0x00);
+			Debug.WriteLine("InitExtension");
+
+			// only initialize if it's not a MotionPlus
+			if(extensionType != 0x04)
+			{
+				WriteData(REGISTER_EXTENSION_INIT_1, 0x55);
+				WriteData(REGISTER_EXTENSION_INIT_2, 0x00);
+			}
 
 			// start reading again
 			BeginAsyncRead();
@@ -442,6 +462,8 @@ namespace WiimoteLib
 				case ExtensionType.Guitar:
 				case ExtensionType.BalanceBoard:
 				case ExtensionType.Drums:
+				case ExtensionType.TaikoDrum:
+				case ExtensionType.MotionPlus:
 					mWiimoteState.ExtensionType = (ExtensionType)type;
 					this.SetReportType(InputReport.ButtonsExtension, true);
 					break;
@@ -494,10 +516,6 @@ namespace WiimoteLib
 					mWiimoteState.ClassicControllerState.CalibrationInfo.MinTriggerR = 0;
 					mWiimoteState.ClassicControllerState.CalibrationInfo.MaxTriggerR = 31;
 					break;
-				case ExtensionType.Guitar:
-				case ExtensionType.Drums:
-					// there appears to be no calibration data returned by the guitar controller
-					break;
 				case ExtensionType.BalanceBoard:
 					buff = ReadData(REGISTER_EXTENSION_CALIBRATION, 32);
 
@@ -515,6 +533,14 @@ namespace WiimoteLib
 					mWiimoteState.BalanceBoardState.CalibrationInfo.Kg34.BottomRight =	(short)((short)buff[22] << 8 | buff[23]);
 					mWiimoteState.BalanceBoardState.CalibrationInfo.Kg34.TopLeft =		(short)((short)buff[24] << 8 | buff[25]);
 					mWiimoteState.BalanceBoardState.CalibrationInfo.Kg34.BottomLeft =	(short)((short)buff[26] << 8 | buff[27]);
+					break;
+				case ExtensionType.MotionPlus:
+					// someday...
+					break;
+				case ExtensionType.Guitar:
+				case ExtensionType.Drums:
+				case ExtensionType.TaikoDrum:
+					// there appears to be no calibration for these controllers
 					break;
 			}
 		}
@@ -876,6 +902,22 @@ namespace WiimoteLib
 					mWiimoteState.BalanceBoardState.CenterOfGravity.X = ((float)(Kx - 1) / (float)(Kx + 1)) * (float)(-BSL / 2);
 					mWiimoteState.BalanceBoardState.CenterOfGravity.Y = ((float)(Ky - 1) / (float)(Ky + 1)) * (float)(-BSW / 2);
 					break;
+
+				case ExtensionType.TaikoDrum:
+					mWiimoteState.TaikoDrumState.OuterLeft  = (buff[offset + 5] & 0x20) == 0;
+					mWiimoteState.TaikoDrumState.InnerLeft  = (buff[offset + 5] & 0x40) == 0;
+					mWiimoteState.TaikoDrumState.InnerRight = (buff[offset + 5] & 0x10) == 0;
+					mWiimoteState.TaikoDrumState.OuterRight = (buff[offset + 5] & 0x08) == 0;
+					break;
+				case ExtensionType.MotionPlus:
+					mWiimoteState.MotionPlusState.YawFast =		((buff[offset + 3] & 0x02) >> 1) == 0;
+					mWiimoteState.MotionPlusState.PitchFast =	((buff[offset + 3] & 0x01) >> 0) == 0;
+					mWiimoteState.MotionPlusState.RollFast =	((buff[offset + 4] & 0x02) >> 1) == 0;
+
+					mWiimoteState.MotionPlusState.RawValues.X = (buff[offset + 0] | (buff[offset + 3] & 0xfa) << 6);
+					mWiimoteState.MotionPlusState.RawValues.Y = (buff[offset + 1] | (buff[offset + 4] & 0xfa) << 6);
+					mWiimoteState.MotionPlusState.RawValues.Z = (buff[offset + 2] | (buff[offset + 5] & 0xfa) << 6);
+					break;
 			}
 		}
 
@@ -901,7 +943,12 @@ namespace WiimoteLib
 				throw new WiimoteException("Error reading data from Wiimote: Bytes do not exist.");
 
 			if((buff[3] & 0x07) != 0)
-				throw new WiimoteException("Error reading data from Wiimote: Attempt to read from write-only registers.");
+			{
+				Debug.WriteLine("*** read from write-only");
+				LastReadStatus = LastReadStatus.ReadFromWriteOnlyMemory;
+				mReadDone.Set();
+				return;
+			}
 
 			// get our size and offset from the report
 			int size = (buff[3] >> 4) + 1;
@@ -913,6 +960,8 @@ namespace WiimoteLib
 			// if we've read it all, set the event
 			if(mAddress + mSize == offset + size)
 				mReadDone.Set();
+
+			LastReadStatus = LastReadStatus.Success;
 		}
 
 		/// <summary>
@@ -947,6 +996,7 @@ namespace WiimoteLib
 		/// <param name="continuous">Continuous data</param>
 		public void SetReportType(InputReport type, bool continuous)
 		{
+			Debug.WriteLine("SetReportType: " + type);
 			SetReportType(type, IRSensitivity.Maximum, continuous);
 		}
 
@@ -975,12 +1025,12 @@ namespace WiimoteLib
 					break;
 			}
 
-			ClearReport();
-			mBuff[0] = (byte)OutputReport.Type;
-			mBuff[1] = (byte)((continuous ? 0x04 : 0x00) | (byte)(mWiimoteState.Rumble ? 0x01 : 0x00));
-			mBuff[2] = (byte)type;
+			byte[] buff = CreateReport();
+			buff[0] = (byte)OutputReport.DataReportType;
+			buff[1] = (byte)((continuous ? 0x04 : 0x00) | (byte)(mWiimoteState.Rumble ? 0x01 : 0x00));
+			buff[2] = (byte)type;
 
-			WriteReport();
+			WriteReport(buff);
 		}
 
 		/// <summary>
@@ -997,17 +1047,17 @@ namespace WiimoteLib
 			mWiimoteState.LEDState.LED3 = led3;
 			mWiimoteState.LEDState.LED4 = led4;
 
-			ClearReport();
+			byte[] buff = CreateReport();
 
-			mBuff[0] = (byte)OutputReport.LEDs;
-			mBuff[1] =	(byte)(
+			buff[0] = (byte)OutputReport.LEDs;
+			buff[1] =	(byte)(
 						(led1 ? 0x10 : 0x00) |
 						(led2 ? 0x20 : 0x00) |
 						(led3 ? 0x40 : 0x00) |
 						(led4 ? 0x80 : 0x00) |
 						GetRumbleBit());
 
-			WriteReport();
+			WriteReport(buff);
 		}
 
 		/// <summary>
@@ -1021,17 +1071,17 @@ namespace WiimoteLib
 			mWiimoteState.LEDState.LED3 = (leds & 0x04) > 0;
 			mWiimoteState.LEDState.LED4 = (leds & 0x08) > 0;
 
-			ClearReport();
+			byte[] buff = CreateReport();
 
-			mBuff[0] = (byte)OutputReport.LEDs;
-			mBuff[1] =	(byte)(
+			buff[0] = (byte)OutputReport.LEDs;
+			buff[1] =	(byte)(
 						((leds & 0x01) > 0 ? 0x10 : 0x00) |
 						((leds & 0x02) > 0 ? 0x20 : 0x00) |
 						((leds & 0x04) > 0 ? 0x40 : 0x00) |
 						((leds & 0x08) > 0 ? 0x80 : 0x00) |
 						GetRumbleBit());
 
-			WriteReport();
+			WriteReport(buff);
 		}
 
 		/// <summary>
@@ -1054,12 +1104,14 @@ namespace WiimoteLib
 		/// </summary>
 		public void GetStatus()
 		{
-			ClearReport();
+			Debug.WriteLine("GetStatus");
 
-			mBuff[0] = (byte)OutputReport.Status;
-			mBuff[1] = GetRumbleBit();
+			byte[] buff = CreateReport();
 
-			WriteReport();
+			buff[0] = (byte)OutputReport.Status;
+			buff[1] = GetRumbleBit();
+
+			WriteReport(buff);
 
 			// signal the status report finished
 			if(!mStatusDone.WaitOne(3000, false))
@@ -1075,15 +1127,15 @@ namespace WiimoteLib
 		{
 			mWiimoteState.IRState.Mode = mode;
 
-			ClearReport();
-			mBuff[0] = (byte)OutputReport.IR;
-			mBuff[1] = (byte)(0x04 | GetRumbleBit());
-			WriteReport();
+			byte[] buff = CreateReport();
+			buff[0] = (byte)OutputReport.IR;
+			buff[1] = (byte)(0x04 | GetRumbleBit());
+			WriteReport(buff);
 
-			ClearReport();
-			mBuff[0] = (byte)OutputReport.IR2;
-			mBuff[1] = (byte)(0x04 | GetRumbleBit());
-			WriteReport();
+			Array.Clear(buff, 0, buff.Length);
+			buff[0] = (byte)OutputReport.IR2;
+			buff[1] = (byte)(0x04 | GetRumbleBit());
+			WriteReport(buff);
 
 			WriteData(REGISTER_IR, 0x08);
 			switch(irSensitivity)
@@ -1126,39 +1178,39 @@ namespace WiimoteLib
 		{
 			mWiimoteState.IRState.Mode = IRMode.Off;
 
-			ClearReport();
-			mBuff[0] = (byte)OutputReport.IR;
-			mBuff[1] = GetRumbleBit();
-			WriteReport();
+			byte[] buff = CreateReport();
+			buff[0] = (byte)OutputReport.IR;
+			buff[1] = GetRumbleBit();
+			WriteReport(buff);
 
-			ClearReport();
-			mBuff[0] = (byte)OutputReport.IR2;
-			mBuff[1] = GetRumbleBit();
-			WriteReport();
+			Array.Clear(buff, 0, buff.Length);
+			buff[0] = (byte)OutputReport.IR2;
+			buff[1] = GetRumbleBit();
+			WriteReport(buff);
 		}
 
 		/// <summary>
 		/// Initialize the report data buffer
 		/// </summary>
-		private void ClearReport()
+		private byte[] CreateReport()
 		{
-			Array.Clear(mBuff, 0, REPORT_LENGTH);
+			return new byte[REPORT_LENGTH];
 		}
 
 		/// <summary>
 		/// Write a report to the Wiimote
 		/// </summary>
-		private void WriteReport()
+		private void WriteReport(byte[] buff)
 		{
-			Debug.WriteLine("WriteReport: " + mBuff[0].ToString("x"));
+			Debug.WriteLine("WriteReport: " + Enum.Parse(typeof(OutputReport), buff[0].ToString()));
 			if(mAltWriteMethod)
-				HIDImports.HidD_SetOutputReport(this.mHandle.DangerousGetHandle(), mBuff, (uint)mBuff.Length);
+				HIDImports.HidD_SetOutputReport(this.mHandle.DangerousGetHandle(), buff, (uint)buff.Length);
 			else if(mStream != null)
-				mStream.Write(mBuff, 0, REPORT_LENGTH);
+				mStream.Write(buff, 0, REPORT_LENGTH);
 
-			if(mBuff[0] == (byte)OutputReport.WriteMemory)
+			if(buff[0] == (byte)OutputReport.WriteMemory)
 			{
-				Debug.WriteLine("Wait");
+//				Debug.WriteLine("Wait");
 				if(!mWriteDone.WaitOne(1000, false))
 					Debug.WriteLine("Wait failed");
 				//throw new WiimoteException("Error writing data to Wiimote...is it connected?");
@@ -1173,22 +1225,22 @@ namespace WiimoteLib
 		/// <returns>Data buffer</returns>
 		public byte[] ReadData(int address, short size)
 		{
-			ClearReport();
+			byte[] buff = CreateReport();
 
 			mReadBuff = new byte[size];
 			mAddress = address & 0xffff;
 			mSize = size;
 
-			mBuff[0] = (byte)OutputReport.ReadMemory;
-			mBuff[1] = (byte)(((address & 0xff000000) >> 24) | GetRumbleBit());
-			mBuff[2] = (byte)((address & 0x00ff0000)  >> 16);
-			mBuff[3] = (byte)((address & 0x0000ff00)  >>  8);
-			mBuff[4] = (byte)(address & 0x000000ff);
+			buff[0] = (byte)OutputReport.ReadMemory;
+			buff[1] = (byte)(((address & 0xff000000) >> 24) | GetRumbleBit());
+			buff[2] = (byte)((address & 0x00ff0000)  >> 16);
+			buff[3] = (byte)((address & 0x0000ff00)  >>  8);
+			buff[4] = (byte)(address & 0x000000ff);
 
-			mBuff[5] = (byte)((size & 0xff00) >> 8);
-			mBuff[6] = (byte)(size & 0xff);
+			buff[5] = (byte)((size & 0xff00) >> 8);
+			buff[6] = (byte)(size & 0xff);
 
-			WriteReport();
+			WriteReport(buff);
 
 			if(!mReadDone.WaitOne(1000, false))
 				throw new WiimoteException("Error reading data from Wiimote...is it connected?");
@@ -1211,21 +1263,20 @@ namespace WiimoteLib
 		/// </summary>
 		/// <param name="address">Address to write</param>
 		/// <param name="size">Length of buffer</param>
-		/// <param name="buff">Data buffer</param>
-		
-		public void WriteData(int address, byte size, byte[] buff)
+		/// <param name="data">Data buffer</param>
+		public void WriteData(int address, byte size, byte[] data)
 		{
-			ClearReport();
+			byte[] buff = CreateReport();
 
-			mBuff[0] = (byte)OutputReport.WriteMemory;
-			mBuff[1] = (byte)(((address & 0xff000000) >> 24) | GetRumbleBit());
-			mBuff[2] = (byte)((address & 0x00ff0000)  >> 16);
-			mBuff[3] = (byte)((address & 0x0000ff00)  >>  8);
-			mBuff[4] = (byte)(address & 0x000000ff);
-			mBuff[5] = size;
-			Array.Copy(buff, 0, mBuff, 6, size);
+			buff[0] = (byte)OutputReport.WriteMemory;
+			buff[1] = (byte)(((address & 0xff000000) >> 24) | GetRumbleBit());
+			buff[2] = (byte)((address & 0x00ff0000)  >> 16);
+			buff[3] = (byte)((address & 0x0000ff00)  >>  8);
+			buff[4] = (byte)(address & 0x000000ff);
+			buff[5] = size;
+			Array.Copy(data, 0, buff, 6, size);
 
-			WriteReport();
+			WriteReport(buff);
 		}
 
 		/// <summary>
@@ -1251,6 +1302,11 @@ namespace WiimoteLib
 		{
 			get { return mDevicePath; }
 		}
+
+		/// <summary>
+		/// Status of last ReadMemory operation
+		/// </summary>
+		public LastReadStatus LastReadStatus { get; private set; }
 
 		#region IDisposable Members
 

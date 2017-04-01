@@ -1,0 +1,72 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <!-- The configuration and platform will be used to determine which
+         assemblies to include from solution and project documentation
+         sources -->
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{45f3f7ba-5d66-46bf-a669-77d33c4e5b9d}</ProjectGuid>
+    <SHFBSchemaVersion>1.8.0.0</SHFBSchemaVersion>
+    <!-- AssemblyName, Name, and RootNamespace are not used by SHFB but Visual
+         Studio adds them anyway -->
+    <AssemblyName>Documentation</AssemblyName>
+    <RootNamespace>Documentation</RootNamespace>
+    <Name>Documentation</Name>
+    <!-- SHFB properties -->
+    <OutputPath>.\Help\</OutputPath>
+    <HtmlHelpName>WiimoteLib</HtmlHelpName>
+    <ProjectSummary>A library to communicate with the Nintendo Wii Remote %28Wiimote%29 from .NET.
+
+This library started life as an article I authored at Coding4Fun.  The original article can be found &amp;lt%3ba href=&amp;quot%3bhttp://blogs.msdn.com/coding4fun/archive/2007/03/14/1879033.aspx&amp;quot%3b&amp;gt%3bhere&amp;lt%3b/a&amp;gt%3b.  It contains information on pairing the Wiimote to Bluetooth, details on the source code and how the library was built.  You will want to read through this if you are at all interested on the internals.  This help file only contains information on the API itself.</ProjectSummary>
+    <MissingTags>Summary, Parameter, Returns, AutoDocumentCtors, Namespace, TypeParameter</MissingTags>
+    <VisibleItems>InheritedMembers, InheritedFrameworkMembers, Protected, SealedProtected</VisibleItems>
+    <HtmlHelp1xCompilerPath>
+    </HtmlHelp1xCompilerPath>
+    <HtmlHelp2xCompilerPath>
+    </HtmlHelp2xCompilerPath>
+    <SandcastlePath>
+    </SandcastlePath>
+    <WorkingPath>
+    </WorkingPath>
+    <BuildLogFile>
+    </BuildLogFile>
+    <FrameworkVersion>2.0.50727</FrameworkVersion>
+    <HelpTitle>WiimoteLib</HelpTitle>
+    <CopyrightHref>copyright.html</CopyrightHref>
+    <CopyrightText>Copyright %28C%29 2007-2009 Brian Peek</CopyrightText>
+    <FeedbackEMailAddress>wiimote%40brianpeek.com</FeedbackEMailAddress>
+    <FooterText>Contact me at my &amp;lt%3ba href=&amp;quot%3bhttp://www.brianpeek.com&amp;quot%3b&amp;gt%3bwebsite&amp;lt%3b/a&amp;gt%3b.  For the full article written on this library, visit &amp;lt%3ba href=&amp;quot%3bhttp://msdn.microsoft.com/coding4fun/hardware/article.aspx%3farticleid=1879033&amp;quot%3b&amp;gt%3bCoding4Fun&amp;lt%3b/a&amp;gt%3b.</FooterText>
+    <PresentationStyle>vs2005</PresentationStyle>
+    <DocumentationSources>
+      <DocumentationSource sourceFile="..\..\bin\Debug\WiimoteLib.dll" xmlns="" />
+<DocumentationSource sourceFile="..\..\bin\Debug\WiimoteLib.XML" xmlns="" /></DocumentationSources>
+    <NamespaceSummaries>
+      <NamespaceSummaryItem name="(global)" isDocumented="False" xmlns="" />
+<NamespaceSummaryItem name="WiimoteLib" isDocumented="True" xmlns="">Functionality to communicate with a Nintendo Wii Remote (Wiimote) from .NET.</NamespaceSummaryItem></NamespaceSummaries>
+  </PropertyGroup>
+  <!-- There are no properties for these two groups but they need to appear in
+       order for Visual Studio to perform the build. -->
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  </PropertyGroup>
+  <ItemGroup>
+    <SiteMap Include="WiimoteLib.sitemap" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="AdditionalContent\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="AdditionalContent\overview.topic" />
+    <Content Include="AdditionalContent\copyright.topic" />
+    <Content Include="AdditionalContent\license.topic" />
+    <Content Include="AdditionalContent\changes.topic" />
+    <Content Include="overview.topic" />
+    <Content Include="license.topic" />
+    <Content Include="copyright.topic" />
+    <Content Include="changes.topic" />
+  </ItemGroup>
+  <!-- Import the SHFB build targets -->
+  <Import Project="$(SHFBROOT)\SandcastleHelpFileBuilder.targets" />
+</Project>

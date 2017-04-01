@@ -1,5 +1,5 @@
 Managed Library for Nintendo's Wiimote
-v1.7.0.0
+v1.8.0.0
 by Brian Peek (http://www.brianpeek.com/)
 
 For more information, please visit the associated article for this project at:
@@ -12,6 +12,18 @@ If all else fails, please contact me at the address above.  Enjoy!
 
 Changes
 =======
+
+v1.8.0.0
+--------
+	o Taiko Drum Master's TaTaCon drum controller supported (Dean Herbert)
+	o Bare-bones Wii MotionPlus support (wiibrew.org, testing by Tyler Tolley)
+	o WiimoteTest UI changed to add MotionPlus data
+	  - Please note that the current version is VERY flakey and may not work at
+	    all for you.
+	  - Pair your Wiimote, plug in your MotionPlus, call InitializeMotionPlus()
+	  - Extensions plugged into the MotionPlus will give wacky results...not
+	    supported...yet!
+	o Internal changes to perhaps fix some threading issues
 
 v1.7.0.0
 --------

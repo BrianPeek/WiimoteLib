@@ -43,10 +43,6 @@
 			this.lblIR2Raw = new System.Windows.Forms.Label();
 			this.lblIR1 = new System.Windows.Forms.Label();
 			this.lblIR2 = new System.Windows.Forms.Label();
-			this.chkFound3 = new System.Windows.Forms.CheckBox();
-			this.chkFound4 = new System.Windows.Forms.CheckBox();
-			this.chkFound1 = new System.Windows.Forms.CheckBox();
-			this.chkFound2 = new System.Windows.Forms.CheckBox();
 			this.pbIR = new System.Windows.Forms.PictureBox();
 			this.lblGuitarWhammy = new System.Windows.Forms.Label();
 			this.groupBox7 = new System.Windows.Forms.GroupBox();
@@ -86,6 +82,13 @@
 			this.lbDrumVelocity = new System.Windows.Forms.ListBox();
 			this.lblDrumJoy = new System.Windows.Forms.Label();
 			this.clbDrums = new System.Windows.Forms.CheckedListBox();
+			this.groupBox11 = new System.Windows.Forms.GroupBox();
+			this.clbTaiko = new System.Windows.Forms.CheckedListBox();
+			this.button1 = new System.Windows.Forms.Button();
+			this.groupBox12 = new System.Windows.Forms.GroupBox();
+			this.lblMotionPlus = new System.Windows.Forms.Label();
+			this.clbIR = new System.Windows.Forms.CheckedListBox();
+			this.clbSpeed = new System.Windows.Forms.CheckedListBox();
 			this.groupBox8.SuspendLayout();
 			this.groupBox5.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pbIR)).BeginInit();
@@ -97,6 +100,8 @@
 			this.groupBox1.SuspendLayout();
 			this.groupBox9.SuspendLayout();
 			this.groupBox10.SuspendLayout();
+			this.groupBox11.SuspendLayout();
+			this.groupBox12.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// groupBox8
@@ -183,6 +188,7 @@
 			// 
 			// groupBox5
 			// 
+			this.groupBox5.Controls.Add(this.clbIR);
 			this.groupBox5.Controls.Add(this.lblIR3Raw);
 			this.groupBox5.Controls.Add(this.lblIR1Raw);
 			this.groupBox5.Controls.Add(this.lblIR4Raw);
@@ -191,13 +197,9 @@
 			this.groupBox5.Controls.Add(this.lblIR1);
 			this.groupBox5.Controls.Add(this.lblIR4);
 			this.groupBox5.Controls.Add(this.lblIR2);
-			this.groupBox5.Controls.Add(this.chkFound3);
-			this.groupBox5.Controls.Add(this.chkFound4);
-			this.groupBox5.Controls.Add(this.chkFound1);
-			this.groupBox5.Controls.Add(this.chkFound2);
 			this.groupBox5.Location = new System.Drawing.Point(184, 0);
 			this.groupBox5.Name = "groupBox5";
-			this.groupBox5.Size = new System.Drawing.Size(176, 188);
+			this.groupBox5.Size = new System.Drawing.Size(176, 148);
 			this.groupBox5.TabIndex = 34;
 			this.groupBox5.TabStop = false;
 			this.groupBox5.Text = "IR";
@@ -256,46 +258,6 @@
 			this.lblIR2.TabIndex = 7;
 			this.lblIR2.Text = "IR2";
 			// 
-			// chkFound3
-			// 
-			this.chkFound3.AutoSize = true;
-			this.chkFound3.Location = new System.Drawing.Point(60, 148);
-			this.chkFound3.Name = "chkFound3";
-			this.chkFound3.Size = new System.Drawing.Size(46, 17);
-			this.chkFound3.TabIndex = 8;
-			this.chkFound3.Text = "IR 3";
-			this.chkFound3.UseVisualStyleBackColor = true;
-			// 
-			// chkFound4
-			// 
-			this.chkFound4.AutoSize = true;
-			this.chkFound4.Location = new System.Drawing.Point(60, 164);
-			this.chkFound4.Name = "chkFound4";
-			this.chkFound4.Size = new System.Drawing.Size(46, 17);
-			this.chkFound4.TabIndex = 8;
-			this.chkFound4.Text = "IR 4";
-			this.chkFound4.UseVisualStyleBackColor = true;
-			// 
-			// chkFound1
-			// 
-			this.chkFound1.AutoSize = true;
-			this.chkFound1.Location = new System.Drawing.Point(8, 148);
-			this.chkFound1.Name = "chkFound1";
-			this.chkFound1.Size = new System.Drawing.Size(46, 17);
-			this.chkFound1.TabIndex = 8;
-			this.chkFound1.Text = "IR 1";
-			this.chkFound1.UseVisualStyleBackColor = true;
-			// 
-			// chkFound2
-			// 
-			this.chkFound2.AutoSize = true;
-			this.chkFound2.Location = new System.Drawing.Point(8, 164);
-			this.chkFound2.Name = "chkFound2";
-			this.chkFound2.Size = new System.Drawing.Size(46, 17);
-			this.chkFound2.TabIndex = 8;
-			this.chkFound2.Text = "IR 2";
-			this.chkFound2.UseVisualStyleBackColor = true;
-			// 
 			// pbIR
 			// 
 			this.pbIR.Location = new System.Drawing.Point(4, 248);
@@ -320,7 +282,7 @@
 			this.groupBox7.Controls.Add(this.lblGuitarWhammy);
 			this.groupBox7.Controls.Add(this.lblGuitarJoy);
 			this.groupBox7.Controls.Add(this.clbGuitarButtons);
-			this.groupBox7.Location = new System.Drawing.Point(364, 272);
+			this.groupBox7.Location = new System.Drawing.Point(364, 248);
 			this.groupBox7.Name = "groupBox7";
 			this.groupBox7.Size = new System.Drawing.Size(188, 176);
 			this.groupBox7.TabIndex = 36;
@@ -385,7 +347,7 @@
 			this.groupBox6.Controls.Add(this.clbCCButtons);
 			this.groupBox6.Location = new System.Drawing.Point(364, 0);
 			this.groupBox6.Name = "groupBox6";
-			this.groupBox6.Size = new System.Drawing.Size(188, 268);
+			this.groupBox6.Size = new System.Drawing.Size(188, 248);
 			this.groupBox6.TabIndex = 35;
 			this.groupBox6.TabStop = false;
 			this.groupBox6.Text = "Classic Controller";
@@ -411,16 +373,16 @@
             "RTrigger"});
 			this.clbCCButtons.Location = new System.Drawing.Point(4, 16);
 			this.clbCCButtons.Name = "clbCCButtons";
-			this.clbCCButtons.Size = new System.Drawing.Size(68, 244);
+			this.clbCCButtons.Size = new System.Drawing.Size(68, 229);
 			this.clbCCButtons.TabIndex = 23;
 			// 
 			// groupBox4
 			// 
 			this.groupBox4.Controls.Add(this.pbBattery);
 			this.groupBox4.Controls.Add(this.lblBattery);
-			this.groupBox4.Location = new System.Drawing.Point(184, 188);
+			this.groupBox4.Location = new System.Drawing.Point(184, 148);
 			this.groupBox4.Name = "groupBox4";
-			this.groupBox4.Size = new System.Drawing.Size(176, 52);
+			this.groupBox4.Size = new System.Drawing.Size(176, 48);
 			this.groupBox4.TabIndex = 33;
 			this.groupBox4.TabStop = false;
 			this.groupBox4.Text = "Battery";
@@ -445,14 +407,14 @@
 			// 
 			// groupBox3
 			// 
+			this.groupBox3.Controls.Add(this.chkRumble);
 			this.groupBox3.Controls.Add(this.chkLED2);
 			this.groupBox3.Controls.Add(this.chkLED4);
 			this.groupBox3.Controls.Add(this.chkLED3);
 			this.groupBox3.Controls.Add(this.chkLED1);
-			this.groupBox3.Controls.Add(this.chkRumble);
-			this.groupBox3.Location = new System.Drawing.Point(264, 248);
+			this.groupBox3.Location = new System.Drawing.Point(176, 196);
 			this.groupBox3.Name = "groupBox3";
-			this.groupBox3.Size = new System.Drawing.Size(96, 120);
+			this.groupBox3.Size = new System.Drawing.Size(184, 52);
 			this.groupBox3.TabIndex = 32;
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "Outputs";
@@ -460,7 +422,7 @@
 			// chkLED2
 			// 
 			this.chkLED2.AutoSize = true;
-			this.chkLED2.Location = new System.Drawing.Point(8, 36);
+			this.chkLED2.Location = new System.Drawing.Point(64, 16);
 			this.chkLED2.Name = "chkLED2";
 			this.chkLED2.Size = new System.Drawing.Size(53, 17);
 			this.chkLED2.TabIndex = 3;
@@ -471,7 +433,7 @@
 			// chkLED4
 			// 
 			this.chkLED4.AutoSize = true;
-			this.chkLED4.Location = new System.Drawing.Point(8, 76);
+			this.chkLED4.Location = new System.Drawing.Point(64, 32);
 			this.chkLED4.Name = "chkLED4";
 			this.chkLED4.Size = new System.Drawing.Size(53, 17);
 			this.chkLED4.TabIndex = 3;
@@ -482,7 +444,7 @@
 			// chkLED3
 			// 
 			this.chkLED3.AutoSize = true;
-			this.chkLED3.Location = new System.Drawing.Point(8, 56);
+			this.chkLED3.Location = new System.Drawing.Point(8, 32);
 			this.chkLED3.Name = "chkLED3";
 			this.chkLED3.Size = new System.Drawing.Size(53, 17);
 			this.chkLED3.TabIndex = 3;
@@ -504,7 +466,7 @@
 			// chkRumble
 			// 
 			this.chkRumble.AutoSize = true;
-			this.chkRumble.Location = new System.Drawing.Point(8, 96);
+			this.chkRumble.Location = new System.Drawing.Point(120, 24);
 			this.chkRumble.Name = "chkRumble";
 			this.chkRumble.Size = new System.Drawing.Size(62, 17);
 			this.chkRumble.TabIndex = 4;
@@ -515,7 +477,7 @@
 			// chkZ
 			// 
 			this.chkZ.AutoSize = true;
-			this.chkZ.Location = new System.Drawing.Point(8, 112);
+			this.chkZ.Location = new System.Drawing.Point(44, 92);
 			this.chkZ.Name = "chkZ";
 			this.chkZ.Size = new System.Drawing.Size(33, 17);
 			this.chkZ.TabIndex = 17;
@@ -548,7 +510,7 @@
 			this.groupBox2.Controls.Add(this.lblChukJoy);
 			this.groupBox2.Location = new System.Drawing.Point(76, 76);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(104, 136);
+			this.groupBox2.Size = new System.Drawing.Size(104, 116);
 			this.groupBox2.TabIndex = 31;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Nunchuk";
@@ -723,10 +685,91 @@
 			this.clbDrums.Size = new System.Drawing.Size(60, 124);
 			this.clbDrums.TabIndex = 26;
 			// 
+			// groupBox11
+			// 
+			this.groupBox11.Controls.Add(this.clbTaiko);
+			this.groupBox11.Location = new System.Drawing.Point(560, 292);
+			this.groupBox11.Name = "groupBox11";
+			this.groupBox11.Size = new System.Drawing.Size(132, 84);
+			this.groupBox11.TabIndex = 41;
+			this.groupBox11.TabStop = false;
+			this.groupBox11.Text = "Taiko TaTaCon Drum";
+			// 
+			// clbTaiko
+			// 
+			this.clbTaiko.FormattingEnabled = true;
+			this.clbTaiko.Items.AddRange(new object[] {
+            "OuterLeft",
+            "InnerLeft",
+            "InnerRight",
+            "OuterRight"});
+			this.clbTaiko.Location = new System.Drawing.Point(4, 16);
+			this.clbTaiko.Name = "clbTaiko";
+			this.clbTaiko.Size = new System.Drawing.Size(124, 64);
+			this.clbTaiko.TabIndex = 1;
+			// 
+			// button1
+			// 
+			this.button1.Location = new System.Drawing.Point(268, 252);
+			this.button1.Name = "button1";
+			this.button1.Size = new System.Drawing.Size(84, 36);
+			this.button1.TabIndex = 42;
+			this.button1.Text = "Initialize MotionPlus";
+			this.button1.UseVisualStyleBackColor = true;
+			this.button1.Click += new System.EventHandler(this.button1_Click);
+			// 
+			// groupBox12
+			// 
+			this.groupBox12.Controls.Add(this.clbSpeed);
+			this.groupBox12.Controls.Add(this.lblMotionPlus);
+			this.groupBox12.Location = new System.Drawing.Point(264, 292);
+			this.groupBox12.Name = "groupBox12";
+			this.groupBox12.Size = new System.Drawing.Size(96, 148);
+			this.groupBox12.TabIndex = 31;
+			this.groupBox12.TabStop = false;
+			this.groupBox12.Text = "MotionPlus";
+			// 
+			// lblMotionPlus
+			// 
+			this.lblMotionPlus.Location = new System.Drawing.Point(8, 20);
+			this.lblMotionPlus.Name = "lblMotionPlus";
+			this.lblMotionPlus.Size = new System.Drawing.Size(84, 48);
+			this.lblMotionPlus.TabIndex = 2;
+			this.lblMotionPlus.Text = "MotionPlus Values";
+			// 
+			// clbIR
+			// 
+			this.clbIR.FormattingEnabled = true;
+			this.clbIR.Items.AddRange(new object[] {
+            "IR 1",
+            "IR 2",
+            "IR 3",
+            "IR 4"});
+			this.clbIR.Location = new System.Drawing.Point(112, 80);
+			this.clbIR.Name = "clbIR";
+			this.clbIR.Size = new System.Drawing.Size(60, 64);
+			this.clbIR.TabIndex = 11;
+			// 
+			// clbSpeed
+			// 
+			this.clbSpeed.FormattingEnabled = true;
+			this.clbSpeed.Items.AddRange(new object[] {
+            "Yaw Fast",
+            "Pitch Fast",
+            "Roll Fast"});
+			this.clbSpeed.Location = new System.Drawing.Point(8, 76);
+			this.clbSpeed.Name = "clbSpeed";
+			this.clbSpeed.Size = new System.Drawing.Size(84, 64);
+			this.clbSpeed.TabIndex = 3;
+			// 
 			// WiimoteInfo
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Controls.Add(this.groupBox3);
+			this.Controls.Add(this.groupBox12);
+			this.Controls.Add(this.button1);
+			this.Controls.Add(this.groupBox11);
 			this.Controls.Add(this.groupBox10);
 			this.Controls.Add(this.lblDevicePath);
 			this.Controls.Add(this.groupBox9);
@@ -736,7 +779,6 @@
 			this.Controls.Add(this.groupBox7);
 			this.Controls.Add(this.groupBox6);
 			this.Controls.Add(this.groupBox4);
-			this.Controls.Add(this.groupBox3);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.chkExtension);
@@ -760,6 +802,8 @@
 			this.groupBox9.ResumeLayout(false);
 			this.groupBox9.PerformLayout();
 			this.groupBox10.ResumeLayout(false);
+			this.groupBox11.ResumeLayout(false);
+			this.groupBox12.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -782,10 +826,6 @@
 		public System.Windows.Forms.Label lblIR2Raw;
 		public System.Windows.Forms.Label lblIR1;
 		public System.Windows.Forms.Label lblIR2;
-		public System.Windows.Forms.CheckBox chkFound3;
-		public System.Windows.Forms.CheckBox chkFound4;
-		public System.Windows.Forms.CheckBox chkFound1;
-		public System.Windows.Forms.CheckBox chkFound2;
 		public System.Windows.Forms.PictureBox pbIR;
 		public System.Windows.Forms.Label lblGuitarWhammy;
 		public System.Windows.Forms.GroupBox groupBox7;
@@ -825,6 +865,13 @@
 		public System.Windows.Forms.CheckedListBox clbDrums;
 		public System.Windows.Forms.Label lblDrumJoy;
 		private System.Windows.Forms.ListBox lbDrumVelocity;
+		public System.Windows.Forms.GroupBox groupBox11;
+		public System.Windows.Forms.CheckedListBox clbTaiko;
+		private System.Windows.Forms.Button button1;
+		public System.Windows.Forms.GroupBox groupBox12;
+		public System.Windows.Forms.Label lblMotionPlus;
+		private System.Windows.Forms.CheckedListBox clbIR;
+		private System.Windows.Forms.CheckedListBox clbSpeed;
 
 	}
 }
