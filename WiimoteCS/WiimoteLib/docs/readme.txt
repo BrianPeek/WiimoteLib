@@ -1,10 +1,17 @@
-# Managed Library for Nintendo's Wiimote v1.7.0.0
-**by [Brian Peek](http://www.brianpeek.com/)**
+Managed Library for Nintendo's Wiimote
+v1.7.0.0
+by Brian Peek (http://www.brianpeek.com/)
 
-For more information, please visit the associated article for this project at 
-[Coding4Fun](http://msdn.microsoft.com/coding4fun/hardware/article.aspx?articleid=1879033). There you will find documentation on how all of this works. If all else fails, please contact me at the address above.  Enjoy!
+For more information, please visit the associated article for this project at:
 
-## Changes
+http://msdn.microsoft.com/coding4fun/hardware/article.aspx?articleid=1879033
+
+There you will find documentation on how all of this works.
+
+If all else fails, please contact me at the address above.  Enjoy!
+
+Changes
+=======
 
 v1.7.0.0
 --------

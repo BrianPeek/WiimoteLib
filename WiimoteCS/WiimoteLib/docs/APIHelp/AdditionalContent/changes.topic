@@ -1,17 +1,21 @@
-# Managed Library for Nintendo's Wiimote v1.7.0.0
-**by [Brian Peek](http://www.brianpeek.com/)**
+<?xml version="1.0" encoding="utf-8"?>
 
-For more information, please visit the associated article for this project at 
-[Coding4Fun](http://msdn.microsoft.com/coding4fun/hardware/article.aspx?articleid=1879033). There you will find documentation on how all of this works. If all else fails, please contact me at the address above.  Enjoy!
+<!DOCTYPE bodyText [ <!ENTITY nbsp "&#160;"> ]>
 
-## Changes
+<topic xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <!-- The page title -->
+    <title>Change Log</title>
+    <!-- The body text for the topic -->
+    <bodyText><pre>
+Changes
+=======
 
 v1.7.0.0
 --------
 	o Writing registers is now properly waiting for the Wiimote to reply
 	  before continuing...this removes all of the Thread.Sleep() calls and
 	  should *greatly* improve performance when setting LEDs and rumble
-	  (Serial Nightmare & wwibrew.org)
+	  (Serial Nightmare &amp; wwibrew.org)
 	o Guitar Hero: World Tour Guitar and Drums now properly recognized and
 	  used (wiibrew.org, tested by Tyler Tolley and Mauro Milazzo)
 	o Guitar whammy bar is now a 5-bit value instead of 4 (wiibrew.org)
@@ -37,7 +41,8 @@ v1.6.0.0
 v1.5.2.0
 --------
 	o Ok, Balance Board support is *really* fixed this time
-	  (thanks to Manuel Schroeder, Eduard Kujit and Alex Wilkinson for testing)
+	  (thanks to Manuel Schroeder, Alex Wilkinson and Eduard
+	  Kujit for testing this release)
 	o LED checkboxes are properly set on the WiimoteTest tabs
 
 v1.5.1.0
@@ -57,7 +62,7 @@ v1.4.0.0
 	o Multiple Wiimotes supported!
 	o Slight change to ExtensionType enum for better extension detection
 	o Decided I didn't like the dependency on System.Drawing for the 2D point
-      so am now using my own Point structs.  Sorry...
+	  so am now using my own Point structs.  Sorry...
 	o WiimoteTest app updated to show multiple Wiimotes working
 
 v1.3.0.0
@@ -74,8 +79,8 @@ v1.3.0.0
 	o Added support for the Guitar Hero controller
 	  (tested by Matthias Shapiro, Evan Jacovier)
 	o Test app will run without Wiimote connected (Andrea Leganza)
-	o ReadData now returns the proper amount of data for requests of more than
-	  16 bytes (reported by David Hawley)
+	o ReadData now returns the proper amount of data for requests of more than 16
+	  bytes (reported by David Hawley)
 	o Test application updated with above changes
 	o Lots of breaking changes, but the survey on my site said most didn't care
 	  about backwards compatibility...  :)
@@ -131,3 +136,5 @@ v1.1.0.0
 v1.0.1.0
 --------
 	o Calibration copy/paste error (James Darpinian)
+	</pre></bodyText>
+</topic>
