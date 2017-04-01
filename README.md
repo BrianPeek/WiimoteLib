@@ -1,8 +1,11 @@
 # Managed Library for Nintendo's Wiimote v1.7.0.0
 **by [Brian Peek](http://www.brianpeek.com/)**
 
-For more information, please visit the associated article for this project at 
-[Coding4Fun](http://msdn.microsoft.com/coding4fun/hardware/article.aspx?articleid=1879033). There you will find documentation on how all of this works. If all else fails, please contact me at the address above.  Enjoy!
+A library for using a Nintendo Wii Remote (Wiimote) from .NET.
+
+This project started life as an article for Microsoft's [Coding4Fun](https://channel9.msdn.com/coding4fun/articles/Managed-Library-for-Nintendos-Wiimote) website.  A full set of API docs can be found in the release package.
+
+I have compiled a [list of applications](http://brianpeek.com/blog/pages/net-based-wiimote-applications.aspx) that are using the library.  Feel free to [contact me](http://brianpeek.com/contact) with your creations so I can add them to the list.
 
 ## Changes
 
