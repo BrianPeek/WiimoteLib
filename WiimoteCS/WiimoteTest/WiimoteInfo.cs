@@ -216,5 +216,10 @@ namespace WiimoteTest
 		{
 			set { mWiimote = value; }
 		}
-	}
+
+        private void CalZeroPoint_Click(object sender, EventArgs e)
+        {
+			mWiimote.WiimoteState.BalanceBoardState.ZeroPoint.Reset = true;
+		}
+    }
 }

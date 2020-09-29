@@ -538,6 +538,11 @@ namespace WiimoteLib
 		[DataMember]
 		public BalanceBoardSensorsF SensorValuesLb;
 		/// <summary>
+		/// Zero Point / tare values 
+		/// </summary>
+		[DataMember]
+		public ZeroPoint ZeroPoint;
+		/// <summary>
 		/// Total kilograms on the Balance Board
 		/// </summary>
 		[DataMember]
@@ -634,6 +639,30 @@ namespace WiimoteLib
 		/// </summary>
 		[DataMember]
 		public float BottomLeft;
+	}
+
+	/// /// <summary>
+	/// Zero Point / tare values
+	/// </summary>
+	[Serializable]
+	[DataContract]
+	public struct ZeroPoint
+    {
+		/// <summary>
+		/// Kilograms per sensor
+		/// </summary>
+		[DataMember]
+		public BalanceBoardSensorsF SensorValuesKg;
+		/// <summary>
+		/// Has Zero Point been set?
+		/// </summary>
+		[DataMember]
+		public Boolean IsSet;
+		/// <summary>
+		/// Set the zero point
+		/// </summary>
+		[DataMember]
+		public Boolean Reset;
 	}
 
 	/// <summary>
