@@ -862,13 +862,32 @@ namespace WiimoteLib
 					mWiimoteState.BalanceBoardState.SensorValuesKg.BottomLeft = GetBalanceBoardSensorValue(mWiimoteState.BalanceBoardState.SensorValuesRaw.BottomLeft, mWiimoteState.BalanceBoardState.CalibrationInfo.Kg0.BottomLeft, mWiimoteState.BalanceBoardState.CalibrationInfo.Kg17.BottomLeft, mWiimoteState.BalanceBoardState.CalibrationInfo.Kg34.BottomLeft);
 					mWiimoteState.BalanceBoardState.SensorValuesKg.BottomRight = GetBalanceBoardSensorValue(mWiimoteState.BalanceBoardState.SensorValuesRaw.BottomRight, mWiimoteState.BalanceBoardState.CalibrationInfo.Kg0.BottomRight, mWiimoteState.BalanceBoardState.CalibrationInfo.Kg17.BottomRight, mWiimoteState.BalanceBoardState.CalibrationInfo.Kg34.BottomRight);
 
+					if (mWiimoteState.BalanceBoardState.ZeroPoint.Reset)
+                    {
+						mWiimoteState.BalanceBoardState.ZeroPoint.SensorValuesKg.TopLeft = mWiimoteState.BalanceBoardState.SensorValuesKg.TopLeft;
+						mWiimoteState.BalanceBoardState.ZeroPoint.SensorValuesKg.TopRight = mWiimoteState.BalanceBoardState.SensorValuesKg.TopRight;
+						mWiimoteState.BalanceBoardState.ZeroPoint.SensorValuesKg.BottomLeft = mWiimoteState.BalanceBoardState.SensorValuesKg.BottomLeft;
+						mWiimoteState.BalanceBoardState.ZeroPoint.SensorValuesKg.BottomRight = mWiimoteState.BalanceBoardState.SensorValuesKg.BottomRight;
+						mWiimoteState.BalanceBoardState.ZeroPoint.IsSet = true;
+						mWiimoteState.BalanceBoardState.ZeroPoint.Reset = false;
+						// todo: average over 2 seconds of readings, if values are not stable, reset failed.
+					}
+
+					if (mWiimoteState.BalanceBoardState.ZeroPoint.IsSet)
+                    {
+						mWiimoteState.BalanceBoardState.SensorValuesKg.TopLeft -= mWiimoteState.BalanceBoardState.ZeroPoint.SensorValuesKg.TopLeft;
+						mWiimoteState.BalanceBoardState.SensorValuesKg.TopRight -= mWiimoteState.BalanceBoardState.ZeroPoint.SensorValuesKg.TopRight;
+						mWiimoteState.BalanceBoardState.SensorValuesKg.BottomLeft -= mWiimoteState.BalanceBoardState.ZeroPoint.SensorValuesKg.BottomLeft;
+						mWiimoteState.BalanceBoardState.SensorValuesKg.BottomRight -= mWiimoteState.BalanceBoardState.ZeroPoint.SensorValuesKg.BottomRight;
+					}
+
 					mWiimoteState.BalanceBoardState.SensorValuesLb.TopLeft = (mWiimoteState.BalanceBoardState.SensorValuesKg.TopLeft * KG2LB);
 					mWiimoteState.BalanceBoardState.SensorValuesLb.TopRight = (mWiimoteState.BalanceBoardState.SensorValuesKg.TopRight * KG2LB);
 					mWiimoteState.BalanceBoardState.SensorValuesLb.BottomLeft = (mWiimoteState.BalanceBoardState.SensorValuesKg.BottomLeft * KG2LB);
 					mWiimoteState.BalanceBoardState.SensorValuesLb.BottomRight = (mWiimoteState.BalanceBoardState.SensorValuesKg.BottomRight * KG2LB);
 
-					mWiimoteState.BalanceBoardState.WeightKg = (mWiimoteState.BalanceBoardState.SensorValuesKg.TopLeft + mWiimoteState.BalanceBoardState.SensorValuesKg.TopRight + mWiimoteState.BalanceBoardState.SensorValuesKg.BottomLeft + mWiimoteState.BalanceBoardState.SensorValuesKg.BottomRight) / 4.0f;
-					mWiimoteState.BalanceBoardState.WeightLb = (mWiimoteState.BalanceBoardState.SensorValuesLb.TopLeft + mWiimoteState.BalanceBoardState.SensorValuesLb.TopRight + mWiimoteState.BalanceBoardState.SensorValuesLb.BottomLeft + mWiimoteState.BalanceBoardState.SensorValuesLb.BottomRight) / 4.0f;
+					mWiimoteState.BalanceBoardState.WeightKg = (mWiimoteState.BalanceBoardState.SensorValuesKg.TopLeft + mWiimoteState.BalanceBoardState.SensorValuesKg.TopRight + mWiimoteState.BalanceBoardState.SensorValuesKg.BottomLeft + mWiimoteState.BalanceBoardState.SensorValuesKg.BottomRight);
+					mWiimoteState.BalanceBoardState.WeightLb = (mWiimoteState.BalanceBoardState.SensorValuesLb.TopLeft + mWiimoteState.BalanceBoardState.SensorValuesLb.TopRight + mWiimoteState.BalanceBoardState.SensorValuesLb.BottomLeft + mWiimoteState.BalanceBoardState.SensorValuesLb.BottomRight);
 
 					float Kx = (mWiimoteState.BalanceBoardState.SensorValuesKg.TopLeft + mWiimoteState.BalanceBoardState.SensorValuesKg.BottomLeft) / (mWiimoteState.BalanceBoardState.SensorValuesKg.TopRight + mWiimoteState.BalanceBoardState.SensorValuesKg.BottomRight);
 					float Ky = (mWiimoteState.BalanceBoardState.SensorValuesKg.TopLeft + mWiimoteState.BalanceBoardState.SensorValuesKg.TopRight) / (mWiimoteState.BalanceBoardState.SensorValuesKg.BottomLeft + mWiimoteState.BalanceBoardState.SensorValuesKg.BottomRight);
@@ -885,9 +904,9 @@ namespace WiimoteLib
 				return 0;
 
 			if(sensor < mid)
-				return 68.0f * ((float)(sensor - min) / (mid - min));
+				return 17.0f * ((float)(sensor - min) / (mid - min));
 			else
-				return 68.0f * ((float)(sensor - mid) / (max - mid)) + 68.0f;
+				return 17.0f * ((float)(sensor - mid) / (max - mid)) + 17.0f;
 		}
 
 
